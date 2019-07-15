@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>repl.it</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js">
+
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/4.1.3/cash.min.js">
+
+	</script>
+	<script src="https://unpkg.com/torus-dom/dist/index.min.js">
+
+	</script>
+</head>
+
+<body>
+	<section class="section">
+		<div class="container">
+			<h1 class="title">
+				<span class="icon"><i class="fas fa-book"></i></span>
+        STIM
+        </h1>
+			<p class="subtitle">
+				A Super Tiny Interactive fiction Maker
+			</p>
+		</div>
+	</section>
+	<section class="section">
+		<div class="buttons">
+			<a class="button is-primary">
+				<span class="icon">
+        <i class="fas fa-plus-square"></i>
+        </span>
+        <span>New STIM</span>
+        </a>
+        <a class="button is-link" title="Save STIM">
+        <span class="icon">
+        <i class="fas fa-save"></i>
+        </span>
+        <span>Save STIM</span>
+        </a>
+        <a class="button is-danger">
+        <span class="icon">
+        <i class="fas fa-truck-loading"></i>
+        </span>
+        <span>Load STIM</span>
+        </a>
+        <a class="button">
+        <span class="icon">
+        <i class="fas fa-file-export"></i>
+        </span>
+        <span>Export HTML</span>
+        </a>
+      </div>
+    </section>
+    <section class="section">
+      <div class="columns is-mobile">
+        <article class="column is-one-third-mobile">
+          <!-- Add content or other tiles -->
+          <h5 class="title is-5">Items</h5>
+          <p class="buttons">
+            <a class="button" title="Add Paragraph">
+            <span class="icon is-small">
+            <i class="fas fa-paragraph"></i>
+            </span>
+            </a>
+            <a class="button" title="Add Choice(s)">
+            <span class="icon is-small">
+            <i class="fas fa-list"></i>    </span>
+            </a>
+            <a class="button" title="Add Image">
+            <span class="icon is-small">
+            <i class="fas fa-images"></i>
+            </span>
+            </a>
+          </p>
+        </article>
+        <article class="column">
+          <!-- Add content or other tiles -->
+          <h5 class="title is-5">Field</h5>
+          <!-- text card -->
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon">
+                <i class="fas fa-paragraph"></i>
+                </span> 
+                Text area
+              </p>
+              <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+              </a>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
+                <br>
+                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <a href="#" class="card-footer-item">Test</a>
+              <a href="#" class="card-footer-item">Edit</a>
+              <a href="#" class="card-footer-item">Delete</a>
+            </footer>
+          </div>
+          <hr/>
+          <!-- choice card -->
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon">
+                <i class="fas fa-list"></i>
+                </span> 
+                Choices
+              </p>
+              <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+              </a>
+            </header>
+            <div class="card-content">
+              <!--
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                  <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
+                  <br>
+                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                </div> -->
+              <div class= "content">
+                <p>Choice one text</p>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <p class="card-footer-item">
+                <a href="#">Add Choice</a>
+                <!--
+                  <a class="button is-primary is-small">
+                  <span class="icon">
+                  <i class="fas fa-plus-square"></i>
+                  </span>
+                  <span>New Choice</span>
+                  </a>-->
+              </p>
+              <p class="card-footer-item">
+                <select>
+                  <option value="volvo">Choice 1</option>
+                  <option value="saab">Choice 2</option>
+                  <option value="mercedes">Choice 3</option>
+                  <option value="audi">Choice 4</option>
+                </select>
+              </p>
+              <p class="card-footer-item">
+                <!--
+                  <a class="button is-warning is-small">
+                  <span class="icon">
+                  <i class="fas fa-trash-alt"></i>
+                  </span>
+                  < <span>New Choice</span>
+                  </a> -->
+                <a href="#"> Delete</a>
+              </p>
+              <!--
+                <a href="#" class="card-footer-item">Test</a>
+                <a href="#" class="card-footer-item">Edit</a>
+                <a href="#" class="card-footer-item">Delete</a>
+                --> 
+              <!--
+                <nav class="pagination" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" title="This is the first page" disabled>Previous</a>
+                <a class="pagination-next">Next page</a>
+                <ul class="pagination-list">
+                <li>
+                  <a class="pagination-link is-current" aria-label="Page 1" aria-current="page">1</a>
+                </li>
+                <li>
+                  <a class="pagination-link" aria-label="Goto page 2">2</a>
+                </li>
+                <li>
+                  <a class="pagination-link" aria-label="Goto page 3">3</a>
+                </li>
+                </ul>
+                </nav>
+                -->
+            </footer>
+          </div>
+          <hr/>
+          <!-- image card -->
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon">
+                <i class="fas fa-images"></i>
+                </span> 
+                Image
+              </p>
+              <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+              </a>
+            </header>
+
+<div class="card-content">
+  <div class="content">
+    <img src="https://via.placeholder.com/150" />
+  </div>
+</div>
+
+<footer class="card-footer">
+  <a href="#" class="card-footer-item">Test</a>
+  <a href="#" class="card-footer-item">Edit</a>
+  <a href="#" class="card-footer-item">Delete</a>
+  </footer>
+
+
+          </div>
+        </article>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
