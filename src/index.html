@@ -27,206 +27,123 @@
         </h1>
 			<p class="subtitle">
 				A Super Tiny Interactive fiction Maker
+        <span class="icon" title="About this project"><i class="fas fa-info-circle"></i></span>
 			</p>
 		</div>
 	</section>
+  <!-- controls -->
 	<section class="section">
 		<div class="buttons">
 			<a class="button is-primary">
 				<span class="icon">
-        <i class="fas fa-plus-square"></i>
+          <i class="fas fa-plus-square"></i>
         </span>
         <span>New STIM</span>
-        </a>
-        <a class="button is-link" title="Save STIM">
+      </a>
+      <a class="button is-link" title="Save STIM">
         <span class="icon">
-        <i class="fas fa-save"></i>
+          <i class="fas fa-save"></i>
         </span>
         <span>Save STIM</span>
-        </a>
-        <a class="button is-danger">
+      </a>
+      <a class="button is-danger">
         <span class="icon">
-        <i class="fas fa-truck-loading"></i>
+          <i class="fas fa-truck-loading"></i>
         </span>
         <span>Load STIM</span>
-        </a>
-        <a class="button">
+      </a>
+      <a class="button">
         <span class="icon">
-        <i class="fas fa-file-export"></i>
+          <i class="fas fa-file-export"></i>
         </span>
         <span>Export HTML</span>
-        </a>
-      </div>
-    </section>
+      </a>
+    </div>
+  </section>
+
     <section class="section">
       <div class="columns is-mobile">
         <article class="column is-one-third-mobile">
           <!-- Add content or other tiles -->
           <h5 class="title is-5">Items</h5>
           <p class="buttons">
-            <a class="button" title="Add Paragraph">
-            <span class="icon is-small">
-            <i class="fas fa-paragraph"></i>
-            </span>
+            <!-- add text -->
+            <a class="button" title="Add Paragraph" id='addParagraph'>
+              <span class="icon is-small">
+                <i class="fas fa-paragraph"></i>
+              </span>
             </a>
-            <a class="button" title="Add Choice(s)">
-            <span class="icon is-small">
-            <i class="fas fa-list"></i>    </span>
+            <!-- add choice -->
+            <a class="button" title="Add Choice(s)" id="addChoice">
+              <span class="icon is-small">
+                <i class="fas fa-list"></i>    
+              </span>
             </a>
-            <a class="button" title="Add Image">
+
+            <!-- add image -->
+
+            <a class="button" title="Add Image" disabled>
             <span class="icon is-small">
             <i class="fas fa-images"></i>
             </span>
             </a>
+
+            <!-- add video -->
+
+            <a class="button" title="Add Video" disabled>
+            <span class="icon is-small">
+            <i class="fas fa-video"></i>
+            </span>
+            </a>
+
+            <!-- add code -->
+            
+            <a class="button" title="Add Code" disabled>
+            <span class="icon is-small">
+            <i class="fas fa-code"></i>
+            </span>
+            </a>
+
           </p>
         </article>
-        <article class="column">
+        <article class="column" id="storyNode">
           <!-- Add content or other tiles -->
-          <h5 class="title is-5">Field</h5>
-          <!-- text card -->
-          <div class="card">
-            <header class="card-header">
-              <p class="card-header-title">
-                <span class="icon">
-                <i class="fas fa-paragraph"></i>
-                </span> 
-                Text area
-              </p>
-              <a href="#" class="card-header-icon" aria-label="more options">
-              <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
+          <h5 class="title is-5">
+            <span class="icon">
+              <i class="fas fa-cog"></i>
               </span>
-              </a>
-            </header>
-            <div class="card-content">
-              <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-                <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
-                <br>
-                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-              </div>
-            </div>
-            <footer class="card-footer">
-              <a href="#" class="card-footer-item">Test</a>
-              <a href="#" class="card-footer-item">Edit</a>
-              <a href="#" class="card-footer-item">Delete</a>
-            </footer>
-          </div>
-          <hr/>
-          <!-- choice card -->
-          <div class="card">
-            <header class="card-header">
-              <p class="card-header-title">
-                <span class="icon">
-                <i class="fas fa-list"></i>
-                </span> 
-                Choices
-              </p>
-              <a href="#" class="card-header-icon" aria-label="more options">
-              <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-              </a>
-            </header>
-            <div class="card-content">
-              <!--
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-                  <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
-                  <br>
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div> -->
-              <div class= "content">
-                <p>Choice one text</p>
-              </div>
-            </div>
-            <footer class="card-footer">
-              <p class="card-footer-item">
-                <a href="#">Add Choice</a>
-                <!--
-                  <a class="button is-primary is-small">
-                  <span class="icon">
-                  <i class="fas fa-plus-square"></i>
-                  </span>
-                  <span>New Choice</span>
-                  </a>-->
-              </p>
-              <p class="card-footer-item">
-                <select>
-                  <option value="volvo">Choice 1</option>
-                  <option value="saab">Choice 2</option>
-                  <option value="mercedes">Choice 3</option>
-                  <option value="audi">Choice 4</option>
-                </select>
-              </p>
-              <p class="card-footer-item">
-                <!--
-                  <a class="button is-warning is-small">
-                  <span class="icon">
-                  <i class="fas fa-trash-alt"></i>
-                  </span>
-                  < <span>New Choice</span>
-                  </a> -->
-                <a href="#"> Delete</a>
-              </p>
-              <!--
-                <a href="#" class="card-footer-item">Test</a>
-                <a href="#" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
-                --> 
-              <!--
-                <nav class="pagination" role="navigation" aria-label="pagination">
-                <a class="pagination-previous" title="This is the first page" disabled>Previous</a>
-                <a class="pagination-next">Next page</a>
-                <ul class="pagination-list">
-                <li>
-                  <a class="pagination-link is-current" aria-label="Page 1" aria-current="page">1</a>
-                </li>
-                <li>
-                  <a class="pagination-link" aria-label="Goto page 2">2</a>
-                </li>
-                <li>
-                  <a class="pagination-link" aria-label="Goto page 3">3</a>
-                </li>
-                </ul>
-                </nav>
-                -->
-            </footer>
-          </div>
-          <hr/>
-          <!-- image card -->
-          <div class="card">
-            <header class="card-header">
-              <p class="card-header-title">
-                <span class="icon">
-                <i class="fas fa-images"></i>
-                </span> 
-                Image
-              </p>
-              <a href="#" class="card-header-icon" aria-label="more options">
-              <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-              </a>
-            </header>
+            Story
+            </h5>
 
-<div class="card-content">
-  <div class="content">
-    <img src="https://via.placeholder.com/150" />
-  </div>
-</div>
-
-<footer class="card-footer">
-  <a href="#" class="card-footer-item">Test</a>
-  <a href="#" class="card-footer-item">Edit</a>
-  <a href="#" class="card-footer-item">Delete</a>
-  </footer>
-
-
-          </div>
+          <!-- CARDS GO HERE -->
+        
         </article>
       </div>
     </section>
+
+<div id="modals"></div>
+
+<!-- modal -->
+<div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <!-- Any other Bulma elements you want -->
+    <div class="box"> TESTING </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close" id='modalClose'></button>
+</div>
+
+
+
+<hr>
+<div class="container">
+  <div class="notification">
+    Debug stuff below:
+  </div>
+  <div id="debug"></div>
+</div>
+
+
     <script src="script.js"></script>
   </body>
 </html>
