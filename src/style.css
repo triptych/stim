@@ -10,3 +10,7 @@
     padding: 1.25rem;
     margin: 1rem;
 }
+
+.modal-card-body textarea {
+  width: 100%;
+}

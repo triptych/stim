@@ -5,9 +5,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>repl.it</title>
+  <!-- styles  --> 
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
-	<link href="style.css" rel="stylesheet" type="text/css" />
-	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js">
+	
+  <link href="style.css" rel="stylesheet" type="text/css" />
+	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.2/jszip.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js">
 
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/4.1.3/cash.min.js">
@@ -34,25 +38,28 @@
   <!-- controls -->
 	<section class="section">
 		<div class="buttons">
-			<a class="button is-primary">
+			<a class="button is-primary" id="newstim" title="New STIM>
 				<span class="icon">
           <i class="fas fa-plus-square"></i>
         </span>
         <span>New STIM</span>
       </a>
-      <a class="button is-link" title="Save STIM">
+
+      <a class="button is-link" title="Save STIM" id="savestim">
         <span class="icon">
           <i class="fas fa-save"></i>
         </span>
         <span>Save STIM</span>
       </a>
-      <a class="button is-danger">
+
+      <a class="button is-danger" title="Load STIM" id="loadstim">
         <span class="icon">
           <i class="fas fa-truck-loading"></i>
         </span>
         <span>Load STIM</span>
       </a>
-      <a class="button">
+
+      <a class="button" id="exportHTML">
         <span class="icon">
           <i class="fas fa-file-export"></i>
         </span>
@@ -124,13 +131,15 @@
 <div id="modals"></div>
 
 <!-- modal -->
-<div class="modal">
+<div class="modal" id="debugmodal">
   <div class="modal-background"></div>
   <div class="modal-content">
     <!-- Any other Bulma elements you want -->
-    <div class="box"> TESTING </div>
+    <div class="box"> 
+      
+    </div>
   </div>
-  <button class="modal-close is-large" aria-label="close" id='modalClose'></button>
+  <button class="modal-close is-large" aria-label="close" id='debugmodalclose'></button>
 </div>
 
 
@@ -141,9 +150,11 @@
     Debug stuff below:
   </div>
   <div id="debug"></div>
+  <hr>
+  <button id="debug-showstate" class="button is-black">ShowState</button>
 </div>
 
 
-    <script src="script.js"></script>
+    <script src="scripts/script.js" type="module"></script>
   </body>
 </html>
