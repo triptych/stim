@@ -14,3 +14,7 @@
 .modal-card-body textarea {
   width: 100%;
 }
+
+#file {
+  display:none;
+}

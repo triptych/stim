@@ -1,3 +1,5 @@
+/** STIM JS v 0.04 8*/
+
 let modal = null;
 let stim = null;
 console.log("scripts.js loaded ")
@@ -53,6 +55,19 @@ function saveModal(){
 
 window.addEventListener('modal-hide', saveModal,false);
 
+window.addEventListener('export-game', (evt)=>{
+  console.log('export-game evt:', evt);
+  console.log('evt.detail', evt.detail);
+  evt.detail(app.cards.serialize())
+
+}, true);
+
+
+window.addEventListener("set-game-from-json", (evt)=> {
+  console.log('set-game-from-json');
+  console.log('evt.detail', evt.detail);
+  app.populateCardStore(app.cards, evt.detail);
+}, true);
 
 document.querySelector("#debugmodalclose").addEventListener("click", () => {
   document.querySelector("#debugmodal").classList.remove("is-active")
@@ -67,4 +82,6 @@ document.querySelector('#debug-showstate').addEventListener('click', ()=>{
   debugmodal.getElementsByClassName("box")[0].innerHTML = "<textarea rows=10>"+JSON.stringify(output)+"</textarea>";
   debugmodal.classList.add("is-active");
 
-})
+});
+
+

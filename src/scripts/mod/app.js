@@ -16,6 +16,18 @@ class CardStore extends StoreOf(Card) {
 
 }
 
+let populateCardStore = (store, array) => {
+  console.log("populateCardStore store:",store)
+  console.log("populateCardStore array:",array)
+  let tempJson = JSON.parse(array);
+  let tempCardArray = [];
+  for(var i=0; i<tempJson.length; i++){
+    tempCardArray[i] = new Card(tempJson[i]);
+  }
+  store.reset(tempCardArray);
+
+
+}
 // const cards = new CardStore([
   // new Card(1, {
   //   type: 'text',
@@ -316,5 +328,6 @@ export default {
   init,
   App,
   ModalDialog,
-  cards
+  cards,
+  populateCardStore
 }
