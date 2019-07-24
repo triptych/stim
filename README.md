@@ -1,5 +1,9 @@
 # STIM: A Super Tiny Interactive fiction Maker
 
+## Links:
+* [Bleeding edge live updated version](https://repl.it/@triptych/Super-Tiny-IF-Maker-STIM)
+* [More or less stable version](http://stim.netlify.com)
+
 ## Credits:
 
 * Creator: [Andrew Wooldridge](andreww.xyz)
