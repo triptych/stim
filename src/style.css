@@ -18,3 +18,7 @@
 #file {
   display:none;
 }
+
+.clickable {
+  cursor: pointer;
+}

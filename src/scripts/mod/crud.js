@@ -15,6 +15,7 @@ var init = () => {
 let exportGame = (obj) => {
   console.log("export called w obj:", obj);
   var zip = new JSZip();
+  var gameTitle = document.querySelector("#story-settings").dataset.title;
 
   zip.folder('stim')
     .file('index.html', "<body>test</body>")
@@ -27,9 +28,10 @@ let exportGame = (obj) => {
     theLink.setAttribute("href", "data:application/zip;base64," + base64);
     theLink.classList.add("dl-link");
     theLink.classList.add("hidden");
-    theLink.setAttribute("download", obj.name + ".zip");
+    theLink.setAttribute("download", gameTitle + ".zip");
     theLink.appendChild(document.createTextNode("Click Here To Download"));
     //document.getElementsByTagName("body")[0].appendChild(theLink);
+    document.querySelector("#dlbutton").html = "";
     document.getElementById('dlbutton').appendChild(theLink);
     theLink.click();
   }, function (err) {
@@ -41,6 +43,15 @@ let exportGame = (obj) => {
 
 let importgame = (file) => {
   console.log("import called in jszip,  file:", file);
+  console.log("file name", file.name);
+
+  let gameTitle = file.name.split(".zip")[0];
+  var setTitleFromJson = new CustomEvent("set-game-title", {
+    detail: gameTitle
+  })
+  window.dispatchEvent(setTitleFromJson);
+
+
   JSZip.loadAsync(file).then(function (zip) {
     zip.forEach(function (relativePath, zipEntry) {
       console.log("zipEntry.name", zipEntry.name);

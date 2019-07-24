@@ -125,7 +125,7 @@
         <article class="column" id="storyNode">
           <!-- Add content or other tiles -->
           <h5 class="title is-5">
-            <span class="icon">
+            <span class="icon clickable" id="story-settings" title="Story Settings" data-title="">
               <i class="fas fa-cog"></i>
               </span>
             Story
@@ -149,6 +149,25 @@
     </div>
   </div>
   <button class="modal-close is-large" aria-label="close" id='debugmodalclose'></button>
+</div>
+
+<!-- settings -->
+
+<div class="modal" id="settings-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Game Settings</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <div><label for="game-title">Game Title</label> <input type="text" id="game-title"/></div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button btn-cancel">Cancel</button>
+    </footer>
+  </div>
 </div>
 
 

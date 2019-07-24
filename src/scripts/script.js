@@ -6,6 +6,7 @@ console.log("scripts.js loaded ")
 import events from './mod/events.js';
 import app from './mod/app.js';
 import crud from './mod/crud.js';
+import settings from './mod/settings.js';
 
 $(() => {
   // // console.log("I'm ready! Promotion!");
@@ -13,6 +14,7 @@ $(() => {
   test();
   app.init();
   crud.init();
+  settings.init();
 
   stim = new app.App();
   console.log('stim: ', stim)
@@ -84,4 +86,9 @@ document.querySelector('#debug-showstate').addEventListener('click', ()=>{
 
 });
 
+
+window.addEventListener('set-game-title', (evt)=> {
+  //settings.gameSettings.title = evt.detail
+  settings.setGameTitle(evt.detail);
+}, true)
 
