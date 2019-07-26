@@ -18,6 +18,12 @@ function bindEvents(){
     window.dispatchEvent(mshow);
   });
 
+  document.querySelector("#addChoice").addEventListener("click", function(){
+    console.log("addChoice");
+    var cshow = new Event('choicemodal-show');
+    window.dispatchEvent(cshow);
+  });
+
   document.getElementById('modalclose').addEventListener('click', ()=>{
       // document.getElementsByClassName('modal')[0].classList.remove('is-active')
       console.log("event.js close");
@@ -45,6 +51,11 @@ function bindEvents(){
        var mhide = new Event('modal-hide');
       window.dispatchEvent(mhide);
   });
+
+// choice bindings
+
+
+
 
 // experimental
 

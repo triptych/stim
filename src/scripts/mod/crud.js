@@ -31,7 +31,7 @@ let exportGame = (obj) => {
     theLink.setAttribute("download", gameTitle + ".zip");
     theLink.appendChild(document.createTextNode("Click Here To Download"));
     //document.getElementsByTagName("body")[0].appendChild(theLink);
-    document.querySelector("#dlbutton").html = "";
+    document.querySelector("#dlbutton").innerHTML = "";
     document.getElementById('dlbutton').appendChild(theLink);
     theLink.click();
   }, function (err) {

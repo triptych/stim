@@ -1,7 +1,10 @@
 /** STIM JS v 0.04 8*/
 
+// globals
 let modal = null;
 let stim = null;
+let choicemodal = null;
+
 console.log("scripts.js loaded ")
 import events from './mod/events.js';
 import app from './mod/app.js';
@@ -19,16 +22,18 @@ $(() => {
   stim = new app.App();
   console.log('stim: ', stim)
   modal = new app.ModalDialog();
-  console.log('modal:',modal);
+  choicemodal = new app.ChoiceDialog();
+  console.log('modal:', modal);
 
   $('#storyNode').append(stim.node);
   $('#modals').append(modal.node);
-events.init();
+  $('#modals').append(choicemodal.node);
+  events.init();
 
 })
 
 let test = () => {
-   console.log("test");
+  console.log("test");
 }
 
 
@@ -36,28 +41,35 @@ let test = () => {
 
 //event listeners
 
-function showModal(){
+function showModal() {
   console.log('showModal called')
   modal.onShow()
 }
 
-window.addEventListener('modal-show', showModal,false);
+window.addEventListener('modal-show', showModal, false);
 
-function hideModal(){
+
+function showChoiceModal() {
+  console.log("showChoiceModal called");
+  choicemodal.onShow()
+}
+
+window.addEventListener('choicemodal-show', showChoiceModal, false);
+function hideModal() {
   console.log('hideModal called');
   modal.onHide()
 }
 
-window.addEventListener('modal-hide', hideModal,false);
+window.addEventListener('modal-hide', hideModal, false);
 
-function saveModal(){
+function saveModal() {
   console.log("saveModal called");
   modal.saveChanges();
 }
 
-window.addEventListener('modal-hide', saveModal,false);
+window.addEventListener('modal-hide', saveModal, false);
 
-window.addEventListener('export-game', (evt)=>{
+window.addEventListener('export-game', (evt) => {
   console.log('export-game evt:', evt);
   console.log('evt.detail', evt.detail);
   evt.detail(app.cards.serialize())
@@ -65,7 +77,7 @@ window.addEventListener('export-game', (evt)=>{
 }, true);
 
 
-window.addEventListener("set-game-from-json", (evt)=> {
+window.addEventListener("set-game-from-json", (evt) => {
   console.log('set-game-from-json');
   console.log('evt.detail', evt.detail);
   app.populateCardStore(app.cards, evt.detail);
@@ -76,19 +88,23 @@ document.querySelector("#debugmodalclose").addEventListener("click", () => {
 })
 // debug
 
-document.querySelector('#debug-showstate').addEventListener('click', ()=>{
+document.querySelector('#debug-showstate').addEventListener('click', () => {
   let output = app.cards.serialize();
   console.log("output: ", output)
   let debugmodal = document.querySelector("#debugmodal");
 
-  debugmodal.getElementsByClassName("box")[0].innerHTML = "<textarea rows=10>"+JSON.stringify(output)+"</textarea>";
+  debugmodal.getElementsByClassName("box")[0].innerHTML = "<textarea rows=10>" + JSON.stringify(output) + "</textarea>";
   debugmodal.classList.add("is-active");
 
 });
 
 
-window.addEventListener('set-game-title', (evt)=> {
+window.addEventListener('set-game-title', (evt) => {
   //settings.gameSettings.title = evt.detail
   settings.setGameTitle(evt.detail);
-}, true)
+}, true);
+
+document.querySelector("#about-stim").addEventListener("click", () => {
+  window.location.href = "https://github.com/triptych/stim/blob/master/README.md"
+})
 
