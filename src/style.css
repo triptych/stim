@@ -22,3 +22,7 @@
 .clickable {
   cursor: pointer;
 }
+
+.choice-nav button {
+  margin-right: 5px;
+}

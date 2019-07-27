@@ -13,7 +13,7 @@ for (const exportedName in Torus) {
 class Card extends Record { }
 
 class CardStore extends StoreOf(Card) {
-
+  //no need for comparator
 }
 
 let populateCardStore = (store, array) => {
@@ -132,7 +132,7 @@ class App extends StyledComponent {
 
 
 
-// Card stuff
+// Card stuff - specific types of cards
 
 class TextCard extends Component {
   init(content) {
@@ -287,6 +287,7 @@ class ImageCard extends Component {
 // const imgcard = new ImageCard();
 // document.body.appendChild(imgcard.node);
 
+// dialog for paragraph card
 class ModalDialog extends Component {
   init(source, removeCallback) {
     this.removeCallback = removeCallback;
@@ -344,6 +345,7 @@ class ModalDialog extends Component {
   }
 }
 
+// dialog for choice card
 class ChoiceDialog extends Component {
   init(source, removeCallback) {
     this.removeCallback = removeCallback;
@@ -352,6 +354,7 @@ class ChoiceDialog extends Component {
     this.saveChanges = this.saveChanges.bind(this);
     this.hiddenClass = '';
     this.modalTitle = "Add new choice block";
+    this.cardOptionsView = new CardOptionList(cards)
   }
 
   saveChanges() {
@@ -362,11 +365,13 @@ class ChoiceDialog extends Component {
           choices: [
             { idx: 1, label: 'first', target: null },
             { idx: 2, label: 'second', target: null }
-          ]
+          ], 
+          label: document.getElementById('choicelabel').value
         }
       })
     );
     this.onHide();
+    document.getElementById('choicelabel').value = '';
   }
 
   onShow() {
@@ -390,8 +395,53 @@ class ChoiceDialog extends Component {
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
-      <div><label for="textlabel">Label:</label><input id="choicetextlabel" /></div>
-      <div><textarea id="choicetextarea" rows=3></textarea></div>
+        <div>
+          <label for="choicelabel">Label:</label>
+          <input type="text" id="choicelabel"/>
+          </div>
+        <div class="choice-nav">
+          <button class="button is-primary">
+            <span class="icon">
+              <i class="fas fa-plus-square"></i>
+            </span>
+          </button>
+
+          <button class="button is-danger">
+            <span class="icon">
+              <i class="fas fa-minus-square"></i>
+            </span>
+          </button>
+
+          <button class="button is-warning" disabled> 
+            <span class="icon">
+              <i class="fas fa-arrow-circle-up"></i>
+            </span>
+          </button>
+          <button class="button is-warning" disabled>
+            <span class="icon">
+              <i class="fas fa-arrow-circle-down"></i>
+            </span>
+          </button>                    
+        </div>
+
+            <table class="table">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Choice Text</th>
+            <th>Choice Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" id="choice-check"/></td>
+            <td>First Choice</td>
+            <td> 
+              ${this.cardOptionsView.node}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </section>
     <footer class="modal-card-foot">
       <button class="button is-success" id="choicesavechanges" onclick="${this.saveChanges}">Save changes</button>
@@ -406,7 +456,30 @@ class ChoiceDialog extends Component {
 }
 
 
+// cardselect classes
 
+class CardOption extends StyledComponent {
+  init(source, removeCallback){
+    console.log("CardOption init called");
+    this.removeCallback = removeCallback;
+
+    this.bind(source, data => this.render(data));
+    this.displayLabel = source.data.content.label? source.data.content.label : "-"
+  }
+
+  compose(data){
+    console.log("CardOption compose - data:",data);
+    return jdom`
+      <option>${data.content.label}</option>
+    `;
+  }
+}
+
+class CardOptionList extends ListOf(CardOption){
+  compose(){
+    return jdom`<select>${this.nodes}</select>`;
+  }
+}
 
 
 
