@@ -3,10 +3,25 @@ var init = () => {
   console.log("app.js init called");
 }
 
+// move to a utility js
+
+function htmlToElement(html) {
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function htmlToElements(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.childNodes;
+}
+
 
 
 for (const exportedName in Torus) {
-  console.log("torus:", exportedName)
+  //console.log("torus:", exportedName)
   window[exportedName] = Torus[exportedName];
 }
 
@@ -144,8 +159,16 @@ class TextCard extends Component {
     this.content.hidden = false;
     this.onShow = this.onShow.bind(this);
     this.onHide = this.onHide.bind(this);
+    this.onDelete = this.onDelete.bind(this);
     this.hideDown = "";
     this.hideUp = "is-hidden";
+  }
+
+  onDelete(){
+    console.log("TextCard delete called");
+    console.log("content:", this.content);
+    console.log("this:", this);
+    cards.remove(cards.find(this.content.idx));
   }
 
   onShow() {
@@ -187,15 +210,15 @@ class TextCard extends Component {
                 </span>
               </a>
             </header>
-            <div class="card-content">
-              <div class="content ${this.hideDown}">
+            <div class="card-content ${this.hideDown}">
+              <div class="content ">
               ${this.content.value}
               </div>
             </div>
             <footer class="card-footer">
               <a href="#" class="card-footer-item">Test</a>
               <a href="#" class="card-footer-item">Edit</a>
-              <a href="#" class="card-footer-item">Delete</a>
+              <a href="javascript:" class="card-footer-item" onclick="${this.onDelete}">Delete</a>
             </footer>
           </div>
   `;
@@ -207,24 +230,77 @@ class TextCard extends Component {
 // document.body.appendChild(textcard.node);
 
 class ChoiceCard extends Component {
-  compose() {
+
+  init(content) {
+    // this.bind(content, props => {
+    //   this.render(props);
+    // })
+    console.log("Choicecard init [content]", content);
+    this.content = content;
+    this.content.hidden = false;
+    this.onShow = this.onShow.bind(this);
+    this.onHide = this.onHide.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.hideDown = "";
+    this.hideUp = "is-hidden";
+  }
+
+ onShow() {
+    console.log("Textcard onShow called")
+    this.content.hidden = false;
+    this.hideDown = "";
+    this.hideUp = "is-hidden"
+    this.render();
+
+  }
+
+  onHide() {
+    console.log("Textcard onHide called");
+    this.content.hidden = true;
+    this.hideDown = "is-hidden";
+    this.hideUp = "";
+    this.render();
+  }
+
+  onDelete(){
+    console.log("TextCard delete called");
+    console.log("content:", this.content);
+    console.log("this:", this);
+    cards.remove(cards.find(this.content.idx));
+  }
+
+  compose(data) {
+    console.log("choicecard compose - data:", data);
+    //let strOptions = ``;
+    let domSel = document.createElement('select');
+    this.content.choices.forEach((itm,idx)=> {
+      // strOptions += `<option value="${itm.label}">${itm.label}</option>`
+        domSel.appendChild(htmlToElement('<option>'+ itm.label+'</option>'));
+      })
+    // console.log('strOptions:', strOptions);
+    // let domOptions = htmlToElements(strOptions);
+    console.log('domSel', domSel);
+
     return jdom`<div class="card">
             <header class="card-header">
               <p class="card-header-title">
-                <span class="icon">
+                <span class="icon" >
                 <i class="fas fa-list"></i>
                 </span> 
-                Choices
+                Choice: ${this.content.label}
               </p>
-              <a href="#" class="card-header-icon" aria-label="more options">
-              <span class="icon">
+              <a href="javascript:" class="card-header-icon" aria-label="more options" onclick=${this.content.hidden ? this.onShow : this.onHide} >
+              <span class="icon ${this.hideDown}">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
               </span>
+              <span class="icon ${this.hideUp}">
+                  <i class="fas fa-angle-up" aria-hidden="true"></i>
+                </span>
               </a>
             </header>
-            <div class="card-content">
+            <div class="card-content ${this.hideDown}">
               <div class= "content">
-                <p>Choice one text</p>
+                <p>[tbd]</p>
               </div>
             </div>
             <footer class="card-footer">
@@ -232,15 +308,10 @@ class ChoiceCard extends Component {
                 <a href="#">Add Choice</a>
               </p>
               <p class="card-footer-item">
-                <select>
-                  <option value="volvo">Choice 1</option>
-                  <option value="saab">Choice 2</option>
-                  <option value="mercedes">Choice 3</option>
-                  <option value="audi">Choice 4</option>
-                </select>
+                ${domSel}
               </p>
               <p class="card-footer-item">
-                <a href="#"> Delete</a>
+                <a href="javascript:" onclick="${this.onDelete}"> Delete</a>
               </p>
             </footer>
           </div>`;
@@ -299,9 +370,12 @@ class ModalDialog extends Component {
   }
 
   saveChanges() {
-    cards.add(new Card(cards.records.size, {
+    let idx = cards.records.size;
+
+    cards.add(new Card(idx, {
       type: 'text',
       content: {
+        idx: idx,
         value: document.getElementById('textarea').value,
         label: document.getElementById('textlabel').value
       }
@@ -331,7 +405,7 @@ class ModalDialog extends Component {
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
-      <div><label for="textlabel">Label:</label><input id="textlabel" /></div>
+      <div class="labelrow"><label for="textlabel">Label:</label><input id="textlabel" /></div>
       <div><textarea id="textarea" rows=3></textarea></div>
     </section>
     <footer class="modal-card-foot">
@@ -352,20 +426,32 @@ class ChoiceDialog extends Component {
     this.onShow = this.onShow.bind(this);
     this.onHide = this.onHide.bind(this);
     this.saveChanges = this.saveChanges.bind(this);
+    this.domAddChoice = this.domAddChoice.bind(this);
+    this.domRemoveChoice = this.domRemoveChoice.bind(this);
     this.hiddenClass = '';
     this.modalTitle = "Add new choice block";
     this.cardOptionsView = new CardOptionList(cards)
   }
 
   saveChanges() {
+     let idx=cards.records.size;
+     let domChoices = document.querySelectorAll("#choice-table-body tr");
+     let choicesArr = [];
+     domChoices.forEach((itm,idx)=> {
+       let choiceObj = {
+         idx: choicesArr.length,
+         label: itm.querySelector(".choice-label-field").value,
+         target: itm.querySelector(".choice-link-field").value
+       }
+       choicesArr.push(choiceObj);
+     })
+
     cards.add(
-      new Card(cards.records.size, {
+      new Card(idx, {
         type: 'choice',
         content: {
-          choices: [
-            { idx: 1, label: 'first', target: null },
-            { idx: 2, label: 'second', target: null }
-          ], 
+          idx: idx,
+          choices: choicesArr, 
           label: document.getElementById('choicelabel').value
         }
       })
@@ -384,6 +470,36 @@ class ChoiceDialog extends Component {
     this.render();
   }
 
+// todo: change this to data driven 
+  domAddChoice(){
+    let tbody = document.querySelector('#choice-table-body');
+
+    let newRow = htmlToElement(`
+          <tr>
+            <td><input type="checkbox" class="choice-check"/></td>
+            <td><input type="text" class="choice-label-field"/></td>
+            <td> 
+              <input type="text" class="choice-link-field"/>
+            </td>
+          </tr>
+    `);
+
+    tbody.appendChild(newRow);
+  }
+
+// todo: move this to data driven
+  domRemoveChoice(){
+   let tbody = document.querySelector('#choice-table-body');
+
+    let selectedRows = document.querySelectorAll('input:checked:enabled')
+    console.log("selectedRows:", selectedRows);
+    selectedRows.forEach((el,idx) => {
+      console.log('el:', el);
+      console.log("idx:", idx);
+      tbody.removeChild(el.parentNode.parentNode);
+    })
+  }
+
   compose(){
         return jdom`
     <div class="modal ${this.hiddenClass}">
@@ -395,18 +511,19 @@ class ChoiceDialog extends Component {
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
-        <div>
+        <div class="labelrow">
           <label for="choicelabel">Label:</label>
           <input type="text" id="choicelabel"/>
           </div>
         <div class="choice-nav">
-          <button class="button is-primary">
+          <button class="button is-primary" onclick="${this.domAddChoice}">
             <span class="icon">
               <i class="fas fa-plus-square"></i>
             </span>
           </button>
 
-          <button class="button is-danger">
+          <button class="button is-danger"
+          onclick="${this.domRemoveChoice}">
             <span class="icon">
               <i class="fas fa-minus-square"></i>
             </span>
@@ -432,12 +549,13 @@ class ChoiceDialog extends Component {
             <th>Choice Link</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="choice-table-body">
           <tr>
-            <td><input type="checkbox" id="choice-check"/></td>
-            <td>First Choice</td>
+            <td><input type="checkbox" class="choice-check"/></td>
+            <td><input type="text" class="choice-label-field"/></td>
             <td> 
-              ${this.cardOptionsView.node}
+              <!-- todo: ${this.cardOptionsView.node} -->
+              <input type="text" class="choice-link-field"/>
             </td>
           </tr>
         </tbody>
@@ -480,6 +598,11 @@ class CardOptionList extends ListOf(CardOption){
     return jdom`<select>${this.nodes}</select>`;
   }
 }
+
+
+// edit textcard
+// todo: add editing textcard modal
+
 
 
 

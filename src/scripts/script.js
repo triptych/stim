@@ -108,3 +108,5 @@ document.querySelector("#about-stim").addEventListener("click", () => {
   window.location.href = "https://github.com/triptych/stim/blob/master/README.md"
 })
 
+
+

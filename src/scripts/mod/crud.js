@@ -16,11 +16,41 @@ let exportGame = (obj) => {
   console.log("export called w obj:", obj);
   var zip = new JSZip();
   var gameTitle = document.querySelector("#story-settings").dataset.title;
+  // let idxHTML = document.getElementById("runtimeHTML").content.cloneNode("true");
+  // let idxHTML = document.importNode(document.getElementById("runtimeHTML").content, true);
+
+
+// var promise = new Promise(function (resolve, reject) {
+//     fetch('scripts/mod/runtime.js', function (error, response, body) {
+//         if (error) {
+//           console.log("error:", error)
+//             reject(error);
+//         } else {
+//           console.log("--- resolve body", body)
+//           resolve(body);
+//         }
+//     });
+// });
+
+// fetch('scripts/mod/runtime.js', function (error, response, body) {
+//     console.log("ggggg body :", body)
+// });
+var scriptText = "";
+var req = new Request("scripts/mod/runtime.js")
+fetch(req).then(response => {
+    return response.text()
+  }).then(text => {
+    console.log("###", text);
+  })
+
+  console.log("idxHTML", idxHTML)
 
   zip.folder('stim')
-    .file('index.html', "<body>test</body>")
+    .file('index.html', idxHTML)
     .file('stim.js', 'var stim=' + JSON.stringify(obj))
-    .file('core.js', '"corejs"');
+    .file('core.js', fetch(req).then(response => {
+    return response.text()
+  }));
 
   zip.generateAsync({ type: "base64" }).then(function (base64) {
     var theLink = document.createElement("a");
@@ -138,6 +168,29 @@ document.getElementById("file").addEventListener("change", function (evt) {
 
   }
 });
+
+
+/** templates  */
+
+let idxHTML = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>STIM: Runtime demo</title>
+    <script src="https://unpkg.com/torus-dom/dist/index.min.js">
+
+	</script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="game"></div>
+    <script src="core.js" type="module"></script>
+    <script src="stim.js"></script>
+  </body>
+</html>
+`;
 
 
 

@@ -15,6 +15,14 @@
   width: 100%;
 }
 
+.labelrow {
+  margin-bottom: 14px;
+}
+
+.labelrow label {
+  margin-right: 14px;
+}
+
 #file {
   display:none;
 }
