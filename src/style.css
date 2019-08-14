@@ -34,3 +34,18 @@
 .choice-nav button {
   margin-right: 5px;
 }
+
+.stim-row {
+  padding-right: 1rem;
+}
+
+.stim-main-bar {
+  flex-wrap: nowrap;
+}
+.section {
+  padding: 1rem;
+}
+
+stim-subtitle {
+  font-size: 1rem;
+}

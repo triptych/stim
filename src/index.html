@@ -31,61 +31,85 @@
 				<span class="icon"><i class="fas fa-book"></i></span>
         STIM
         </h1>
-			<p class="subtitle">
-				A Super Tiny Interactive fiction Maker
-        <span class="icon clickable" title="About this project" id="about-stim">
-          <i class="fas fa-info-circle"></i>
-        </span>
+			<p class="subtitle stim-subtitle">
+				Super Tiny Interactive fiction Maker
+
 			</p>
 		</div>
 	</section>
   <!-- controls -->
 	<section class="section">
-		<div class="buttons">
-			<a class="button is-primary" id="newstim" title="New STIM">
+		<div class="buttons has-addons stim-main-bar">
+			<a class="button is-primary is-small" id="newstim" title="New STIM">
 				<span class="icon">
           <i class="fas fa-plus-square"></i>
         </span>
         <span> New STIM</span>
       </a>
 
-      <a class="button is-link" title="Save STIM" id="savestim">
+      <a class="button is-link is-small" title="Save STIM" id="savestim">
         <span class="icon">
           <i class="fas fa-save"></i>
         </span>
         <span>Save STIM</span>
       </a>
 
-      <a class="button is-danger" title="Load STIM" id="loadstim">
+      <a class="button is-danger is-small" title="Load STIM" id="loadstim">
         <span class="icon">
           <i class="fas fa-truck-loading"></i>
         </span>
         <span>Load STIM</span>
       </a>
-
-      <a class="button" id="importHTML">
+		</div>
+    <div class="buttons has-addons">
+      <a class="button is-small" id="importHTML">
         <span class="icon">
           <i class="fas fa-file-import"></i>
         </span>
         <span><input type="file" id="file" name="file"> <label for="file">Import</label> HTML</span>
       </a>
 
-      <a class="button is-black" id="exportHTML">
+      <a class="button is-black is-small" id="exportHTML">
         <span class="icon">
           <i class="fas fa-file-export"></i>
         </span>
         <span>Export HTML</span>
       </a>
       
-      <di id="dlbutton"></div>
+      
     </div>
+    <di id="dlbutton"></div>
   </section>
+<div class="buttons has-addons is-right stim-row">
+  <span class="button">
+               <span class="icon clickable" id="story-settings" title="Story Settings" data-title="">
+              <i class="fas fa-cog"></i>
+              </span>
+  </span>
+  <span class="button">
+            <span class="icon clickable" id="reorder" title="Reorder">
+              <i class="fas fa-sort"></i>
+              </span>
+
+  </span>
+  <span class="button">
+            <span class="icon clickable" title="About this project" id="about-stim">
+          <i class="fas fa-info-circle"></i>
+        </span>
+  </span>
+  <span class="button">
+            <span class="icon clickable" id="reorder" title="Reorder">
+              <i class="fas fa-sync-alt"></i>
+              </span>
+
+  </span>
+</div>
 
     <section class="section">
       <div class="columns is-mobile">
         <article class="column is-3-mobile">
           <!-- Add content or other tiles -->
-          <h5 class="title is-5">Items</h5>
+          <h5 class="title is-5">Parts</h5>
           <p class="buttons">
             <!-- add text -->
             <a class="button" title="Add Paragraph" id='addParagraph'>
@@ -129,10 +153,11 @@
         <article class="column" id="storyNode">
           <!-- Add content or other tiles -->
           <h5 class="title is-5">
-            <span class="icon clickable" id="story-settings" title="Story Settings" data-title="">
-              <i class="fas fa-cog"></i>
-              </span>
             Story
+
+ 
+            
+
             </h5>
 
           <!-- CARDS GO HERE -->
