@@ -76,6 +76,12 @@ window.addEventListener('export-game', (evt) => {
 
 }, true);
 
+window.addEventListener('save-game', (evt)=> {
+  console.log('save-game evt:', evt);
+  console.log('evt.detail', evt.detail);
+  evt.detail.cb(evt.detail.title, app.cards.serialize());
+})
+
 
 window.addEventListener("set-game-from-json", (evt) => {
   console.log('set-game-from-json');
@@ -98,9 +104,14 @@ document.querySelector('#debug-showstate').addEventListener('click', () => {
 
 });
 
+window.addEventListener('get-game-title', (evt) => {
+  console.log('script_js get-game-title');
+  settings.getGameTitle(evt.detail)
+})
 
 window.addEventListener('set-game-title', (evt) => {
   //settings.gameSettings.title = evt.detail
+  console.log("script_js set-game-title")
   settings.setGameTitle(evt.detail);
 }, true);
 

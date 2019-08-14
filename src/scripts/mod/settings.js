@@ -49,6 +49,15 @@ let bindEvents = () => {
     updateSettingsTag();
   }
 
+  // cb: function(title)
+  let getGameTitle = (obj) => {
+    console.log("settings_JS getGameTitle",obj)
+    obj(gameSettings.title);
+  }
+
 export default {
-  init, gameSettings, setGameTitle
+  init, 
+  gameSettings, 
+  setGameTitle,
+  getGameTitle
 }

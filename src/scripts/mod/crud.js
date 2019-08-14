@@ -7,10 +7,77 @@ var init = () => {
   bindEvents();
 }
 
+// new game
+
+let newGame = () => {
+  console.log("crud_js newGame called");
+  let gameTitle = window.prompt("Please input game name:", "untitled");
+
+  var setTitleFromJson = new CustomEvent("set-game-title", {
+    detail: gameTitle
+  })
+  window.dispatchEvent(setTitleFromJson);
+
+  var setGameFromJsonEvt = new CustomEvent("set-game-from-json", {
+    detail: "[]"
+  });
+  window.dispatchEvent(setGameFromJsonEvt);
+
+}
+
+// save game 
+
+let saveGame = () => {
+  console.log("crud_js saveGame called")
+  let getGameTitleEvt = new CustomEvent("get-game-title", {
+    detail: (title) => {
+      saveGameWithTitle(title)
+    }
+  });
+  window.dispatchEvent(getGameTitleEvt)
+}
+
+let saveGameWithTitle = (title) => {
+  console.log("crud_js saveGameWithTitle title:", title);
+
+  let getGameDataEvt = new CustomEvent("save-game", {
+    detail: {
+      title: title,
+      cb: saveGameWithTitleAndData
+    }
+  });
+  window.dispatchEvent(getGameDataEvt);
+
+}
+
+let saveGameWithTitleAndData = (title, data) =>{
+  console.log("crud_js saveGameWithTitleAndData ", {title, data});
+
+  localStorage.setItem(title,JSON.stringify(data));
+}
+
+
+// load game 
+let loadGame = (gameName) => {
+  let game = localStorage.getItem(gameName);
+  let gameTitle = gameName;
+  
+  var setTitleFromJson = new CustomEvent("set-game-title", {
+    detail: gameTitle
+  })
+  window.dispatchEvent(setTitleFromJson);
+
+ var setGameFromJsonEvt = new CustomEvent("set-game-from-json", {
+            detail: game
+          });
+          window.dispatchEvent(setGameFromJsonEvt);
 
 
 
-// game export
+}
+
+
+// game export / import
 
 let exportGame = (obj) => {
   console.log("export called w obj:", obj);
@@ -20,24 +87,24 @@ let exportGame = (obj) => {
   // let idxHTML = document.importNode(document.getElementById("runtimeHTML").content, true);
 
 
-// var promise = new Promise(function (resolve, reject) {
-//     fetch('scripts/mod/runtime.js', function (error, response, body) {
-//         if (error) {
-//           console.log("error:", error)
-//             reject(error);
-//         } else {
-//           console.log("--- resolve body", body)
-//           resolve(body);
-//         }
-//     });
-// });
+  // var promise = new Promise(function (resolve, reject) {
+  //     fetch('scripts/mod/runtime.js', function (error, response, body) {
+  //         if (error) {
+  //           console.log("error:", error)
+  //             reject(error);
+  //         } else {
+  //           console.log("--- resolve body", body)
+  //           resolve(body);
+  //         }
+  //     });
+  // });
 
-// fetch('scripts/mod/runtime.js', function (error, response, body) {
-//     console.log("ggggg body :", body)
-// });
-var scriptText = "";
-var req = new Request("scripts/mod/runtime.js")
-fetch(req).then(response => {
+  // fetch('scripts/mod/runtime.js', function (error, response, body) {
+  //     console.log("ggggg body :", body)
+  // });
+  var scriptText = "";
+  var req = new Request("scripts/mod/runtime.js")
+  fetch(req).then(response => {
     return response.text()
   }).then(text => {
     console.log("###", text);
@@ -49,8 +116,8 @@ fetch(req).then(response => {
     .file('index.html', idxHTML)
     .file('stim.js', 'var stim=' + JSON.stringify(obj))
     .file('core.js', fetch(req).then(response => {
-    return response.text()
-  }));
+      return response.text()
+    }));
 
   zip.generateAsync({ type: "base64" }).then(function (base64) {
     var theLink = document.createElement("a");
@@ -112,14 +179,19 @@ let importgame = (file) => {
 
 let newSTIM = () => {
   console.log("crud newSTIM called");
+
+  newGame();
 }
 
 let saveSTIM = () => {
   console.log("crud saveSTIM called");
+
+  saveGame();
 }
 
 let loadSTIM = () => {
   console.log("crud loadSTIM");
+  loadGame(prompt("load game name:","untitled"));
 }
 
 let exportHTML = () => {
@@ -131,7 +203,7 @@ let exportHTML = () => {
   });
   window.dispatchEvent(evt_export_HTML);
 
-  
+
 
 }
 
