@@ -35,9 +35,10 @@ let populateCardStore = (store, array) => {
   console.log("populateCardStore store:", store)
   console.log("populateCardStore array:", array)
   let tempJson = JSON.parse(array);
+  console.log("))))))) tempJson:", tempJson)
   let tempCardArray = [];
   for (var i = 0; i < tempJson.length; i++) {
-    tempCardArray[i] = new Card(tempJson[i]);
+    tempCardArray[i] = new Card(i,tempJson[i]);
   }
   store.reset(tempCardArray);
 
@@ -84,6 +85,7 @@ class CardItem extends StyledComponent {
     this.type = source.data.type
     this.card = null;
     this.content = source.data.content;
+    this.bind(source, data => this.render(data));
   }
 
   compose(data) {
@@ -129,6 +131,12 @@ class CardList extends ListOf(CardItem) {
 class App extends StyledComponent {
   init() {
     this.list = new CardList(cards)
+    this.onRefreshAppBound = this.refreshApp.bind(this); 
+  }
+
+  refreshApp(){
+    console.log("***refreshApp")
+    this.render();
   }
 
   compose() {
@@ -162,6 +170,7 @@ class TextCard extends Component {
     this.onDelete = this.onDelete.bind(this);
     this.hideDown = "";
     this.hideUp = "is-hidden";
+    //this.bind(content, data => this.render(data));
   }
 
   onDelete(){
@@ -243,6 +252,7 @@ class ChoiceCard extends Component {
     this.onDelete = this.onDelete.bind(this);
     this.hideDown = "";
     this.hideUp = "is-hidden";
+    //this.bind(content, data => this.render(data));
   }
 
  onShow() {
@@ -431,6 +441,7 @@ class ChoiceDialog extends Component {
     this.hiddenClass = '';
     this.modalTitle = "Add new choice block";
     this.cardOptionsView = new CardOptionList(cards)
+    //this.bind(source, data => this.render(data));
   }
 
   saveChanges() {
@@ -500,7 +511,7 @@ class ChoiceDialog extends Component {
     })
   }
 
-  compose(){
+  compose(data){
         return jdom`
     <div class="modal ${this.hiddenClass}">
   <div class="modal-background"></div>
@@ -541,7 +552,7 @@ class ChoiceDialog extends Component {
           </button>                    
         </div>
 
-            <table class="table">
+        <table class="table">
         <thead>
           <tr>
             <th>Select</th>
@@ -581,8 +592,9 @@ class CardOption extends StyledComponent {
     console.log("CardOption init called");
     this.removeCallback = removeCallback;
 
-    this.bind(source, data => this.render(data));
+   
     this.displayLabel = source.data.content.label? source.data.content.label : "-"
+    this.bind(source, data => this.render(data));
   }
 
   compose(data){
@@ -606,12 +618,278 @@ class CardOptionList extends ListOf(CardOption){
 
 
 
+// reorder code 
+
+class ReorderDialog extends Component {
+  init(source, removeCallback){
+    console.log("reorderDialog init called");
+    this.removeCallback = removeCallback;
+    this.onShow = this.onShow.bind(this);
+    this.onHide = this.onHide.bind(this);
+    this.saveChanges = this.saveChanges.bind(this);
+    this.hiddenClass = '';
+    this.modalTitle = "Reorder Blocks";
+    this.listView = new ReorderListView(cards);
+    //this.bind(source, data => this.render(data));
+  }
+
+   onShow() {
+    this.hiddenClass = "is-active";
+    this.render();
+  }
+
+  onHide() {
+    this.hiddenClass = "";
+    this.render();
+  }
+
+  saveChanges(){
+    console.log('reorderDialog saveChanges called');
+
+    this.onHide();
+  }
+
+   compose(data) {
+    return jdom`
+    <div class="modal ${this.hiddenClass}" id="reorder-modal-id">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">${this.modalTitle}</p>
+      <button class="delete" aria-label="close" id="modalclose" onclick="${this.onHide}"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+     
+      ${this.listView.node}
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" id="savechanges" onclick="${this.saveChanges}">Done</button>
+
+    </footer>
+  </div>
+</div>
+    `;
+  }
+}
+
+// reorder view is a list
+
+class ReorderListView extends Component {
+  init(source, removeCallback){
+    console.log("listview init called with source:", source);
+    console.log("source.summarize:", source.summarize())
+    //this.rows = new ListOf(source);
+    this.tbody = new ReorderListBody(cards);
+    this.moveItemUp = this.moveItemUp.bind(this);
+    this.moveItemDown = this.moveItemDown.bind(this);
+    this.bind(source, data => this.render(data));
+  }
+
+  moveItemUp(evt){
+    console.log("reorderlistview move item up evt:", evt);
+    // get the current item's index
+    let selId = document.getElementById("reorder-modal-id").querySelector("tr.is-selected").dataset.id;
+
+    // let iter = 0;
+    // for(const card of cards ){
+    //   console.log("card:", card)
+    //   card.update({
+    //     id: iter
+    //   });
+    //   iter++;
+    // }
+
+    console.log("selId:", parseInt(selId));
+    let cardsArr = cards.serialize();
+    console.log("cardsArr  :", cardsArr)
+    console.log("cards:", cards);
+    console.log('cards.find(1)', cards.find(1));
+    if(parseInt(selId) > 0){
+      let oldCard = cards.find(parseInt(selId)).summarize();
+      let tempCard = cards.find(parseInt(selId) - 1).summarize();
+      console.log("oldCard:", oldCard);
+      console.log('tempCard:', tempCard);
+      oldCard.content.idx = parseInt(selId)-1;
+      tempCard.content.idx = parseInt(selId);
+
+
+      cards.find(parseInt(selId)-1).update({
+
+        type: oldCard.type,
+        content: oldCard.content
+      });
+
+      cards.find(parseInt(selId)).update({
+        type: tempCard.type,
+        content: tempCard.content
+      });
+
+
+      /** 
+      cards.find(parseInt(selId)).update({
+        content: {
+          idx: parseInt(selId),
+          value: "wooop",
+          label: "ghghgh",
+          hidden: true
+        }
+      })
+    **/
+
+      //cards.find(parseInt(selId)).update(tempCard)
+
+      console.log("cards summary /n", cards.serialize());
+      populateCardStore(cards, JSON.stringify(cards.serialize()))
+
+      
+    }
+  }
+
+  moveItemDown(evt){
+    console.log("reorderlistview move item down evt:", evt);
+
+    let selId = document.getElementById("reorder-modal-id").querySelector("tr.is-selected").dataset.id;
+
+
+    console.log("selId:", parseInt(selId));
+    let cardsArr = cards.serialize();
+    console.log("cardsArr  :", cardsArr)
+    console.log("cards:", cards);
+    console.log('cards.find(1)', cards.find(1));
+    if(parseInt(selId) < cardsArr.length){
+      let oldCard = cards.find(parseInt(selId)).summarize();
+      let tempCard = cards.find(parseInt(selId) +1).summarize();
+      console.log("oldCard:", oldCard);
+      console.log('tempCard:', tempCard);
+      oldCard.content.idx = parseInt(selId)+1;
+      tempCard.content.idx = parseInt(selId);
+
+
+      cards.find(parseInt(selId)+1).update({
+
+        type: oldCard.type,
+        content: oldCard.content
+      });
+
+      cards.find(parseInt(selId)).update({
+        type: tempCard.type,
+        content: tempCard.content
+      });
+
+
+      /** 
+      cards.find(parseInt(selId)).update({
+        content: {
+          idx: parseInt(selId),
+          value: "wooop",
+          label: "ghghgh",
+          hidden: true
+        }
+      })
+    **/
+
+      //cards.find(parseInt(selId)).update(tempCard)
+
+      console.log("cards summary /n", cards.serialize());
+      populateCardStore(cards, JSON.stringify(cards.serialize()))
+    }
+  }
+
+  compose(data){
+    return jdom`
+    <div class="reorder-list-wrapper">
+    <div class="field has-addons">
+      <p class="control">
+        <a class="button" onclick="${this.moveItemUp}">
+          <span class="icon is-small">
+            <i class="fas fa-sort-up"></i>
+          </span>
+          <span>Move Up</span>
+        </a>
+      </p>
+      <p class="control">
+        <a class="button" onclick="${this.moveItemDown}">
+         <span class="icon is-small">
+            <i class="fas fa-sort-down"></i>
+          </span>
+          <span>Move Down</span>
+        </a>
+      </p>
+    </div>
+
+    <table class="is-bordered is-striped table">
+      <thead>
+        <tr>
+          <td>ID</td>
+          <td>TYPE</td>
+          <td>LABEL</td>
+          
+        </tr>
+      </thead>
+      ${this.tbody.node}
+    </table>
+    </div>
+    `;
+  }
+}
+
+
+class ReorderListRow extends Component {
+  init(source){
+    console.log("init called for ReorderListRow source:", source);
+    this.id = source.data.content.idx
+    this.label = source.data.content.label;
+    this.type = source.data.type;
+    this.onSelectBound = this.onSelect.bind(this);
+    this.bind(source, data => this.render(data));
+  }
+
+  onSelect(evt){
+    console.log("reorderlistrow onSelect clicked ", evt);
+    evt.target.parentNode.parentNode.childNodes.forEach((itm, idx, arr)=>{
+      itm.classList.remove('is-selected');
+    })
+    evt.target.parentNode.classList.toggle('is-selected');
+    //console.log("evt.target", evt.target);
+
+  }
+
+  compose(){
+    return jdom`
+    <tr data-id="${this.id}" onclick="${this.onSelectBound}">
+      <td>
+        ${this.id}
+      </td>
+      <td>
+        ${this.type}
+      </td>
+      <td>
+        ${this.label}
+      </td>
+    </tr>
+    `;
+  }
+}
+
+class ReorderListBody extends ListOf(ReorderListRow){
+  compose(){
+    console.log("reorderlistbody this.nodes:", this.nodes);
+    return jdom`<tbody>
+      ${this.nodes}
+    </tbody>`
+  }
+}
+
+
+// export ALL THE THINGS
 
 export default {
   init,
   App,
   ModalDialog,
   ChoiceDialog,
+  ReorderDialog,
   cards,
   populateCardStore
 }

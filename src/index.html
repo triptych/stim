@@ -81,24 +81,24 @@
     <di id="dlbutton"></div>
   </section>
 <div class="buttons has-addons is-right stim-row">
-  <span class="button">
-               <span class="icon clickable" id="story-settings" title="Story Settings" data-title="">
+  <span class="button" id="story-settings">
+               <span class="icon clickable"  title="Story Settings" data-title="">
               <i class="fas fa-cog"></i>
               </span>
   </span>
-  <span class="button">
+  <span class="button" id="reorder">
             <span class="icon clickable" id="reorder" title="Reorder">
               <i class="fas fa-sort"></i>
               </span>
 
   </span>
-  <span class="button">
-            <span class="icon clickable" title="About this project" id="about-stim">
+  <span class="button" id="about-stim">
+            <span class="icon clickable" title="About this project" >
           <i class="fas fa-info-circle"></i>
         </span>
   </span>
-  <span class="button">
-            <span class="icon clickable" id="reorder" title="Reorder">
+  <span class="button" id="reload">
+            <span class="icon clickable"  title="Reload">
               <i class="fas fa-sync-alt"></i>
               </span>
 
@@ -199,6 +199,27 @@
   </div>
 </div>
 
+<!-- reorder -->
+<!-- move this to TORUS --> 
+<!-- <div class="modal" id="reorder-modal">
+  <div class="modal-background">></div>
+  <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Reorder Elements</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          [ Content here]
+
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success">Save changes</button>
+          <button class="button btn-cancel">Cancel</button>
+        </footer>
+  </div>
+</div> -->
+
+
 
 <!-- templates -->
 <template id="runtimeHTML">
@@ -231,6 +252,9 @@
   <div id="debug"></div>
   <hr>
   <button id="debug-showstate" class="button is-black">ShowState</button>
+
+  <button id="debug-refresh" class="button is-warning">
+    Refresh View</button>
 </div>
 
 

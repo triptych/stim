@@ -54,6 +54,7 @@ let saveGameWithTitleAndData = (title, data) =>{
   console.log("crud_js saveGameWithTitleAndData ", {title, data});
 
   localStorage.setItem(title,JSON.stringify(data));
+  alert("Game: ["+ title +"] saved.");
 }
 
 

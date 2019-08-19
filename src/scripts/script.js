@@ -4,6 +4,7 @@
 let modal = null;
 let stim = null;
 let choicemodal = null;
+let reordermodal = null;
 
 console.log("scripts.js loaded ")
 import events from './mod/events.js';
@@ -22,12 +23,14 @@ $(() => {
   stim = new app.App();
   console.log('stim: ', stim)
   modal = new app.ModalDialog();
+  reordermodal = new app.ReorderDialog();
   choicemodal = new app.ChoiceDialog();
   console.log('modal:', modal);
 
   $('#storyNode').append(stim.node);
   $('#modals').append(modal.node);
   $('#modals').append(choicemodal.node);
+  $('#modals').append(reordermodal.node);
   events.init();
 
 })
@@ -104,6 +107,11 @@ document.querySelector('#debug-showstate').addEventListener('click', () => {
 
 });
 
+
+document.querySelector('#debug-refresh').addEventListener('click', () => {
+  stim.onRefreshAppBound();
+})
+
 window.addEventListener('get-game-title', (evt) => {
   console.log('script_js get-game-title');
   settings.getGameTitle(evt.detail)
@@ -117,7 +125,18 @@ window.addEventListener('set-game-title', (evt) => {
 
 document.querySelector("#about-stim").addEventListener("click", () => {
   window.location.href = "https://github.com/triptych/stim/blob/master/README.md"
+});
+
+document.querySelector("#reload").addEventListener('click', (evt) => {
+  window.location.reload(true);
+});
+
+document.querySelector("#reorder").addEventListener('click', (evt)=> {
+  console.log("reorder clicked");
+  // document.querySelector("#reorder-modal").classList.add("is-active");
+  reordermodal.onShow();
 })
+
 
 
 

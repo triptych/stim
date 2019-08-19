@@ -46,6 +46,20 @@
   padding: 1rem;
 }
 
-stim-subtitle {
+.stim-subtitle {
   font-size: 1rem;
+}
+
+#reorder-modal-id div.field.has-addons {
+  position: fixed;
+  z-index: 100;
+}
+
+#reorder-modal-id .table {
+  position: relative;
+  top: 2.5rem;
+}
+
+#reorder-modal-id .modal-card-body {
+  min-height: 50vh;
 }
