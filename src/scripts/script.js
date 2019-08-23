@@ -4,7 +4,9 @@
 let modal = null;
 let stim = null;
 let choicemodal = null;
+let editchoicemodal = null;
 let reordermodal = null;
+let texteditmodal = null;
 
 console.log("scripts.js loaded ")
 import events from './mod/events.js';
@@ -25,13 +27,16 @@ $(() => {
   modal = new app.ModalDialog();
   reordermodal = new app.ReorderDialog();
   choicemodal = new app.ChoiceDialog();
+  texteditmodal = new app.TextEditModalDialog();
+  editchoicemodal = new app.EditChoiceDialog();
   console.log('modal:', modal);
 
   $('#storyNode').append(stim.node);
   $('#modals').append(modal.node);
   $('#modals').append(choicemodal.node);
   $('#modals').append(reordermodal.node);
-  events.init();
+  $('#modals').append(texteditmodal.node);
+  $('#modals').append(editchoicemodal.node);  events.init();
 
 })
 
@@ -51,6 +56,23 @@ function showModal() {
 
 window.addEventListener('modal-show', showModal, false);
 
+
+function showTextEditModal(evt){
+  console.log("script_js showTextEditModal Called");
+  console.log("evt.detail:", evt.detail);
+  texteditmodal.setData(evt.detail.idx);
+  texteditmodal.onShow();
+}
+
+window.addEventListener('texteditmodal-show', showTextEditModal, true);
+
+function showChoiceEditModal(evt){
+  console.log("script_js showChoiceEditModal called");
+  editchoicemodal.setData(evt.detail.idx);
+  editchoicemodal.onShow();
+}
+
+window.addEventListener("choiceeditmodal-show", showChoiceEditModal, true);
 
 function showChoiceModal() {
   console.log("showChoiceModal called");
