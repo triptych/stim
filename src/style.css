@@ -63,3 +63,7 @@
 #reorder-modal-id .modal-card-body {
   min-height: 50vh;
 }
+
+#reorder-modal-id tbody tr {
+  cursor: pointer;
+}

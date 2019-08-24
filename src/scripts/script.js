@@ -15,9 +15,6 @@ import crud from './mod/crud.js';
 import settings from './mod/settings.js';
 
 $(() => {
-  // // console.log("I'm ready! Promotion!");
-  // // console.log(window.Torus);
-  test();
   app.init();
   crud.init();
   settings.init();
@@ -40,9 +37,7 @@ $(() => {
 
 })
 
-let test = () => {
-  console.log("test");
-}
+
 
 
 
