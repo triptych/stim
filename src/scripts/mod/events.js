@@ -1,7 +1,7 @@
 /** event listeners */
 
 var init = () => {
-  console.log("events: init called");
+  //console.log("events: init called");
   bindEvents();
 }
 

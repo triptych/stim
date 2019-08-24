@@ -1,4 +1,4 @@
-
+/** app.js where all the magic happens */
 var init = () => {
   console.log("app.js init called");
 }
@@ -6,22 +6,21 @@ var init = () => {
 // move to a utility js
 
 function htmlToElement(html) {
-    var template = document.createElement('template');
-    html = html.trim(); // Never return a text node of whitespace as the result
-    template.innerHTML = html;
-    return template.content.firstChild;
+  var template = document.createElement('template');
+  html = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = html;
+  return template.content.firstChild;
 }
 
 function htmlToElements(html) {
-    var template = document.createElement('template');
-    template.innerHTML = html;
-    return template.content.childNodes;
+  var template = document.createElement('template');
+  template.innerHTML = html;
+  return template.content.childNodes;
 }
 
 
 
 for (const exportedName in Torus) {
-  //console.log("torus:", exportedName)
   window[exportedName] = Torus[exportedName];
 }
 
@@ -38,7 +37,7 @@ let populateCardStore = (store, array) => {
   console.log("))))))) tempJson:", tempJson)
   let tempCardArray = [];
   for (var i = 0; i < tempJson.length; i++) {
-    tempCardArray[i] = new Card(i,tempJson[i]);
+    tempCardArray[i] = new Card(i, tempJson[i]);
   }
   store.reset(tempCardArray);
 
@@ -89,14 +88,9 @@ class CardItem extends StyledComponent {
   }
 
   compose(data) {
-    // console.log("in compose, data:", data);
-    // return jdom`<div>
-    //   [card] ${this.type}
-    // </div>
-    //  `;
     switch (this.type) {
       case 'text':
-        console.log("** this.content", this.content);
+        console.log("text case: this.content", this.content);
         this.card = new TextCard(this.content);
         // return jdom`${this.card.node}`;
         break;
@@ -124,17 +118,19 @@ class CardList extends ListOf(CardItem) {
   compose() {
     console.log("Cardlist nodes:", this.nodes);
 
-    return jdom`<ul style="padding:0">${this.nodes}</ul>`;
+    return jdom`<ul style="padding:0">
+      ${this.nodes}
+    </ul>`;
   }
 }
 
 class App extends StyledComponent {
   init() {
     this.list = new CardList(cards)
-    this.onRefreshAppBound = this.refreshApp.bind(this); 
+    this.onRefreshAppBound = this.refreshApp.bind(this);
   }
 
-  refreshApp(){
+  refreshApp() {
     console.log("***refreshApp")
     this.render();
   }
@@ -159,21 +155,32 @@ class App extends StyledComponent {
 
 class TextCard extends Component {
   init(content) {
-    // this.bind(content, props => {
-    //   this.render(props);
-    // })
     console.log("TextCard init [content]", content);
     this.content = content;
     this.content.hidden = false;
     this.onShow = this.onShow.bind(this);
     this.onHide = this.onHide.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     this.hideDown = "";
     this.hideUp = "is-hidden";
+
     //this.bind(content, data => this.render(data));
   }
 
-  onDelete(){
+  onEdit() {
+    console.log("textcard onedit called");
+    // var temshow = new Event('texteditmodal-show');
+    // console.log(" -- idx -- ",this.content.idx);
+
+    // window.dispatchEvent(temshow);
+    var temshow = new CustomEvent("texteditmodal-show", {
+      detail: { idx: this.content.idx }
+    })
+    window.dispatchEvent(temshow);
+  }
+
+  onDelete() {
     console.log("TextCard delete called");
     console.log("content:", this.content);
     console.log("this:", this);
@@ -226,7 +233,7 @@ class TextCard extends Component {
             </div>
             <footer class="card-footer">
               <a href="#" class="card-footer-item">Test</a>
-              <a href="#" class="card-footer-item">Edit</a>
+              <a href="#" class="card-footer-item" onclick="${this.onEdit}">Edit</a>
               <a href="javascript:" class="card-footer-item" onclick="${this.onDelete}">Delete</a>
             </footer>
           </div>
@@ -250,13 +257,14 @@ class ChoiceCard extends Component {
     this.onShow = this.onShow.bind(this);
     this.onHide = this.onHide.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     this.hideDown = "";
     this.hideUp = "is-hidden";
     //this.bind(content, data => this.render(data));
   }
 
- onShow() {
-    console.log("Textcard onShow called")
+  onShow() {
+    console.log("Choicecard onShow called")
     this.content.hidden = false;
     this.hideDown = "";
     this.hideUp = "is-hidden"
@@ -265,28 +273,36 @@ class ChoiceCard extends Component {
   }
 
   onHide() {
-    console.log("Textcard onHide called");
+    console.log("Choicecard onHide called");
     this.content.hidden = true;
     this.hideDown = "is-hidden";
     this.hideUp = "";
     this.render();
   }
 
-  onDelete(){
-    console.log("TextCard delete called");
+  onDelete() {
+    console.log("Choicecard delete called");
     console.log("content:", this.content);
     console.log("this:", this);
     cards.remove(cards.find(this.content.idx));
+  }
+
+  onEdit(){
+    console.log("Choicecard onEdit Called");
+    var cemshow = new CustomEvent("choiceeditmodal-show", {
+      detail: { idx: this.content.idx }
+    })
+    window.dispatchEvent(cemshow);
   }
 
   compose(data) {
     console.log("choicecard compose - data:", data);
     //let strOptions = ``;
     let domSel = document.createElement('select');
-    this.content.choices.forEach((itm,idx)=> {
+    this.content.choices.forEach((itm, idx) => {
       // strOptions += `<option value="${itm.label}">${itm.label}</option>`
-        domSel.appendChild(htmlToElement('<option>'+ itm.label+'</option>'));
-      })
+      domSel.appendChild(htmlToElement('<option>' + itm.label + '</option>'));
+    })
     // console.log('strOptions:', strOptions);
     // let domOptions = htmlToElements(strOptions);
     console.log('domSel', domSel);
@@ -310,12 +326,12 @@ class ChoiceCard extends Component {
             </header>
             <div class="card-content ${this.hideDown}">
               <div class= "content">
-                <p>[tbd]</p>
+                <p>This is a choice block</p>
               </div>
             </div>
             <footer class="card-footer">
               <p class="card-footer-item">
-                <a href="#">Add Choice</a>
+                <a href="javascript:" onclick="${this.onEdit}">Edit Choice(s)</a>
               </p>
               <p class="card-footer-item">
                 ${domSel}
@@ -377,6 +393,7 @@ class ModalDialog extends Component {
     this.saveChanges = this.saveChanges.bind(this);
     this.hiddenClass = '';
     this.modalTitle = "Add new text block";
+    this.idx = 0;
   }
 
   saveChanges() {
@@ -429,6 +446,299 @@ class ModalDialog extends Component {
   }
 }
 
+// todo merge with create text card
+// edit text card
+
+class TextEditModalDialog extends Component {
+  init(source, removeCallback) {
+    console.log("TextEditModalDialog init called with source:", source);
+    this.removeCallback = removeCallback;
+    this.onShow = this.onShow.bind(this);
+    this.onHide = this.onHide.bind(this);
+    this.setData = this.setData.bind(this);
+    this.saveChanges = this.saveChanges.bind(this);
+    this.hiddenClass = '';
+    this.modalTitle = "Edit text block";
+    this.label = '';
+    this.value = '';
+    this.idx = 0;
+  }
+
+  saveChanges() {
+    console.log("TextEditModalDialog saveChanges called");
+    // let idx = cards.records.size;
+
+    // cards.add(new Card(idx, {
+    //   type: 'text',
+    //   content: {
+    //     idx: idx,
+    //     value: document.getElementById('textarea').value,
+    //     label: document.getElementById('textlabel').value
+    //   }
+    // }));
+    // document.getElementById('textarea').value = '';
+    // document.getElementById('textlabel').value = '';
+    cards.find(this.idx).update({
+
+      type: 'text',
+      content: {
+        idx: this.idx,
+        value: document.getElementById('te-value').value,
+        label: document.getElementById('te-label').value,
+        hidden: false
+      }
+    });
+
+    console.log(cards.summarize())
+
+    populateCardStore(cards, JSON.stringify(cards.serialize()))
+    //cards.emitEvent();
+
+    this.onHide();
+  }
+
+  onShow() {
+    this.hiddenClass = "is-active";
+    this.render();
+  }
+
+  onHide() {
+    this.hiddenClass = "";
+    this.render();
+  }
+
+  setData(idx) {
+    console.log("TextEditModalDialog setData called with idx:", idx);
+    let targetCard = cards.find(idx);
+    let tcJson = targetCard.summarize();
+    console.log("tcJson :", tcJson);
+    this.label = tcJson.content.label;
+    this.value = tcJson.content.value;
+    this.idx = tcJson.content.idx;
+
+    this.render();
+  }
+
+  compose() {
+    return jdom`
+    <div class="modal ${this.hiddenClass}" id="text-edit-modal" data=idx="${this.idx}>
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">${this.modalTitle}</p>
+      <button class="delete" aria-label="close" id="modalclose" onclick="${this.onHide}"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <div class="labelrow"><label for="textlabel">Label:</label><input id="te-label"  value="${this.label}" /></div>
+      <div><textarea id="te-value" rows=3>${this.value}</textarea></div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" id="savechanges" onclick="${this.saveChanges}>Save changes</button>
+      <button class="button" id="modalcancel" onclick="${this.onHide}">Cancel</button>
+    </footer>
+  </div>
+</div>
+
+    `;
+  }
+
+}
+
+// dialog for edit choice card
+
+class EditChoiceDialog extends Component {
+  init(source, removeCallback) {
+    console.log("editchoicedialog init called")
+    this.removeCallback = removeCallback;
+    this.onShow = this.onShow.bind(this);
+    this.onHide = this.onHide.bind(this);
+    this.saveChanges = this.saveChanges.bind(this);
+    this.domAddChoice = this.domAddChoice.bind(this);
+    this.domAddChoiceWithArgs = this.domAddChoiceWithArgs.bind(this);
+    this.domRemoveChoice = this.domRemoveChoice.bind(this);
+    this.hiddenClass = '';
+    this.modalTitle = "Edit choice block";
+  }
+
+  saveChanges(){
+    console.log("editchoicedialog saveChanges ");
+
+    let domChoices = document.querySelectorAll("#choicemodal-table-body tr");
+    let choicesArr = [];
+    domChoices.forEach((itm, idx) => {
+      let choiceObj = {
+        idx: choicesArr.length,
+        label: itm.querySelector(".choice-label-field").value,
+        target: itm.querySelector(".choice-link-field").value
+      }
+      choicesArr.push(choiceObj);
+    })
+
+  cards.find(this.idx).update({
+
+      type: 'choice',
+      content: {
+        idx: this.idx,
+        //value: document.getElementById('te-value').value,
+        label: document.getElementById('editchoicelabel').value,
+        hidden: false ,
+        choices: choicesArr
+      }
+    });
+
+    console.log(cards.summarize())
+
+    populateCardStore(cards, JSON.stringify(cards.serialize()))
+
+    this.onHide();
+  }
+
+  onShow() {
+    this.hiddenClass = "is-active";
+    this.render();
+  }
+
+  onHide() {
+    this.hiddenClass = "";
+    this.render();
+  }
+
+  setData(idx) {
+    console.log("EditChoiceDialog setData called with idx:", idx);
+    let targetCard = cards.find(idx);
+    let tcJson = targetCard.summarize();
+    console.log("tcJson :", tcJson);
+    //this.label = tcJson.content.label;
+    //this.value = tcJson.content.value;
+    //this.idx = tcJson.content.idx;
+
+    this.label = tcJson.content.label;
+    this.idx = tcJson.content.idx;
+    this.choices = tcJson.content.choices;
+ 
+    document.querySelector("#editchoicelabel").value = this.label;
+
+    //this.render();
+
+    document.querySelector("#choicemodal-table-body").innerHTML="";
+
+    this.choices.forEach((itm, idx, arr)=>{
+      this.domAddChoiceWithArgs(itm.label, itm.target);
+    });
+  }
+
+  domAddChoice(evt) {
+    let tbody = document.querySelector('#choicemodal-table-body');
+
+    let newRow = htmlToElement(`
+          <tr>
+            <td><input type="checkbox" class="choice-check"/></td>
+            <td><input type="text" class="choice-label-field" 
+            value=""/></td>
+            <td> 
+              <input type="text" class="choice-link-field" value=""/>
+            </td>
+          </tr>
+    `);
+
+    tbody.appendChild(newRow);
+  }
+
+  domAddChoiceWithArgs(label, link) {
+    let tbody = document.querySelector('#choicemodal-table-body');
+
+    let newRow = htmlToElement(`
+          <tr>
+            <td><input type="checkbox" class="choice-check"/></td>
+            <td><input type="text" class="choice-label-field" 
+            value="${label}"/></td>
+            <td> 
+              <input type="text" class="choice-link-field" value="${link}"/>
+            </td>
+          </tr>
+    `);
+
+    tbody.appendChild(newRow);
+  }
+
+  // todo: move this to data driven
+  domRemoveChoice() {
+    let tbody = document.querySelector('#choicemodal-table-body');
+
+    let selectedRows = document.querySelectorAll('input:checked:enabled')
+    console.log("selectedRows:", selectedRows);
+    selectedRows.forEach((el, idx) => {
+      console.log('el:', el);
+      console.log("idx:", idx);
+      tbody.removeChild(el.parentNode.parentNode);
+    })
+  }
+
+  compose(data) {
+    return jdom`
+    <div class="modal ${this.hiddenClass}" id="editchoice-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">${this.modalTitle}</p>
+      <button class="delete" aria-label="close" id="choicemodalclose" onclick="${this.onHide}"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+        <div class="labelrow">
+          <label for="choicelabel">Label:</label>
+          <input type="text" id="editchoicelabel"/>
+          </div>
+        <div class="choice-nav">
+          <button class="button is-primary" onclick="${this.domAddChoice}">
+            <span class="icon">
+              <i class="fas fa-plus-square"></i>
+            </span>
+          </button>
+
+          <button class="button is-danger"
+          onclick="${this.domRemoveChoice}">
+            <span class="icon">
+              <i class="fas fa-minus-square"></i>
+            </span>
+          </button>
+
+          <button class="button is-warning" disabled> 
+            <span class="icon">
+              <i class="fas fa-arrow-circle-up"></i>
+            </span>
+          </button>
+          <button class="button is-warning" disabled>
+            <span class="icon">
+              <i class="fas fa-arrow-circle-down"></i>
+            </span>
+          </button>                    
+        </div>
+
+        <table class="table">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Choice Text</th>
+            <th>Choice Link</th>
+          </tr>
+        </thead>
+        <tbody id="choicemodal-table-body">
+ 
+        </tbody>
+      </table>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" id="choicesavechanges" onclick="${this.saveChanges}">Save changes</button>
+      <button class="button" id="choicemodalcancel" onclick="${this.onHide}">Cancel</button>
+    </footer>
+  </div>
+</div>
+`;
+  }
+}
+
 // dialog for choice card
 class ChoiceDialog extends Component {
   init(source, removeCallback) {
@@ -445,24 +755,24 @@ class ChoiceDialog extends Component {
   }
 
   saveChanges() {
-     let idx=cards.records.size;
-     let domChoices = document.querySelectorAll("#choice-table-body tr");
-     let choicesArr = [];
-     domChoices.forEach((itm,idx)=> {
-       let choiceObj = {
-         idx: choicesArr.length,
-         label: itm.querySelector(".choice-label-field").value,
-         target: itm.querySelector(".choice-link-field").value
-       }
-       choicesArr.push(choiceObj);
-     })
+    let idx = cards.records.size;
+    let domChoices = document.querySelectorAll("#choice-table-body tr");
+    let choicesArr = [];
+    domChoices.forEach((itm, idx) => {
+      let choiceObj = {
+        idx: choicesArr.length,
+        label: itm.querySelector(".choice-label-field").value,
+        target: itm.querySelector(".choice-link-field").value
+      }
+      choicesArr.push(choiceObj);
+    })
 
     cards.add(
       new Card(idx, {
         type: 'choice',
         content: {
           idx: idx,
-          choices: choicesArr, 
+          choices: choicesArr,
           label: document.getElementById('choicelabel').value
         }
       })
@@ -474,6 +784,8 @@ class ChoiceDialog extends Component {
   onShow() {
     this.hiddenClass = "is-active";
     this.render();
+     document.querySelector("#choice-table-body").innerHTML="";
+     this.domAddChoice();
   }
 
   onHide() {
@@ -481,8 +793,8 @@ class ChoiceDialog extends Component {
     this.render();
   }
 
-// todo: change this to data driven 
-  domAddChoice(){
+  // todo: change this to data driven 
+  domAddChoice() {
     let tbody = document.querySelector('#choice-table-body');
 
     let newRow = htmlToElement(`
@@ -498,21 +810,21 @@ class ChoiceDialog extends Component {
     tbody.appendChild(newRow);
   }
 
-// todo: move this to data driven
-  domRemoveChoice(){
-   let tbody = document.querySelector('#choice-table-body');
+  // todo: move this to data driven
+  domRemoveChoice() {
+    let tbody = document.querySelector('#choice-table-body');
 
     let selectedRows = document.querySelectorAll('input:checked:enabled')
     console.log("selectedRows:", selectedRows);
-    selectedRows.forEach((el,idx) => {
+    selectedRows.forEach((el, idx) => {
       console.log('el:', el);
       console.log("idx:", idx);
       tbody.removeChild(el.parentNode.parentNode);
     })
   }
 
-  compose(data){
-        return jdom`
+  compose(data) {
+    return jdom`
     <div class="modal ${this.hiddenClass}">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -588,25 +900,25 @@ class ChoiceDialog extends Component {
 // cardselect classes
 
 class CardOption extends StyledComponent {
-  init(source, removeCallback){
+  init(source, removeCallback) {
     console.log("CardOption init called");
     this.removeCallback = removeCallback;
 
-   
-    this.displayLabel = source.data.content.label? source.data.content.label : "-"
+
+    this.displayLabel = source.data.content.label ? source.data.content.label : "-"
     this.bind(source, data => this.render(data));
   }
 
-  compose(data){
-    console.log("CardOption compose - data:",data);
+  compose(data) {
+    console.log("CardOption compose - data:", data);
     return jdom`
       <option>${data.content.label}</option>
     `;
   }
 }
 
-class CardOptionList extends ListOf(CardOption){
-  compose(){
+class CardOptionList extends ListOf(CardOption) {
+  compose() {
     return jdom`<select>${this.nodes}</select>`;
   }
 }
@@ -621,7 +933,7 @@ class CardOptionList extends ListOf(CardOption){
 // reorder code 
 
 class ReorderDialog extends Component {
-  init(source, removeCallback){
+  init(source, removeCallback) {
     console.log("reorderDialog init called");
     this.removeCallback = removeCallback;
     this.onShow = this.onShow.bind(this);
@@ -633,7 +945,7 @@ class ReorderDialog extends Component {
     //this.bind(source, data => this.render(data));
   }
 
-   onShow() {
+  onShow() {
     this.hiddenClass = "is-active";
     this.render();
   }
@@ -643,13 +955,13 @@ class ReorderDialog extends Component {
     this.render();
   }
 
-  saveChanges(){
+  saveChanges() {
     console.log('reorderDialog saveChanges called');
 
     this.onHide();
   }
 
-   compose(data) {
+  compose(data) {
     return jdom`
     <div class="modal ${this.hiddenClass}" id="reorder-modal-id">
   <div class="modal-background"></div>
@@ -676,7 +988,7 @@ class ReorderDialog extends Component {
 // reorder view is a list
 
 class ReorderListView extends Component {
-  init(source, removeCallback){
+  init(source, removeCallback) {
     console.log("listview init called with source:", source);
     console.log("source.summarize:", source.summarize())
     //this.rows = new ListOf(source);
@@ -686,7 +998,7 @@ class ReorderListView extends Component {
     this.bind(source, data => this.render(data));
   }
 
-  moveItemUp(evt){
+  moveItemUp(evt) {
     console.log("reorderlistview move item up evt:", evt);
     // get the current item's index
     let selId = document.getElementById("reorder-modal-id").querySelector("tr.is-selected").dataset.id;
@@ -705,16 +1017,16 @@ class ReorderListView extends Component {
     console.log("cardsArr  :", cardsArr)
     console.log("cards:", cards);
     console.log('cards.find(1)', cards.find(1));
-    if(parseInt(selId) > 0){
+    if (parseInt(selId) > 0) {
       let oldCard = cards.find(parseInt(selId)).summarize();
       let tempCard = cards.find(parseInt(selId) - 1).summarize();
       console.log("oldCard:", oldCard);
       console.log('tempCard:', tempCard);
-      oldCard.content.idx = parseInt(selId)-1;
+      oldCard.content.idx = parseInt(selId) - 1;
       tempCard.content.idx = parseInt(selId);
 
 
-      cards.find(parseInt(selId)-1).update({
+      cards.find(parseInt(selId) - 1).update({
 
         type: oldCard.type,
         content: oldCard.content
@@ -742,11 +1054,11 @@ class ReorderListView extends Component {
       console.log("cards summary /n", cards.serialize());
       populateCardStore(cards, JSON.stringify(cards.serialize()))
 
-      
+
     }
   }
 
-  moveItemDown(evt){
+  moveItemDown(evt) {
     console.log("reorderlistview move item down evt:", evt);
 
     let selId = document.getElementById("reorder-modal-id").querySelector("tr.is-selected").dataset.id;
@@ -757,16 +1069,16 @@ class ReorderListView extends Component {
     console.log("cardsArr  :", cardsArr)
     console.log("cards:", cards);
     console.log('cards.find(1)', cards.find(1));
-    if(parseInt(selId) < cardsArr.length){
+    if (parseInt(selId) < cardsArr.length) {
       let oldCard = cards.find(parseInt(selId)).summarize();
-      let tempCard = cards.find(parseInt(selId) +1).summarize();
+      let tempCard = cards.find(parseInt(selId) + 1).summarize();
       console.log("oldCard:", oldCard);
       console.log('tempCard:', tempCard);
-      oldCard.content.idx = parseInt(selId)+1;
+      oldCard.content.idx = parseInt(selId) + 1;
       tempCard.content.idx = parseInt(selId);
 
 
-      cards.find(parseInt(selId)+1).update({
+      cards.find(parseInt(selId) + 1).update({
 
         type: oldCard.type,
         content: oldCard.content
@@ -796,7 +1108,7 @@ class ReorderListView extends Component {
     }
   }
 
-  compose(data){
+  compose(data) {
     return jdom`
     <div class="reorder-list-wrapper">
     <div class="field has-addons">
@@ -836,7 +1148,7 @@ class ReorderListView extends Component {
 
 
 class ReorderListRow extends Component {
-  init(source){
+  init(source) {
     console.log("init called for ReorderListRow source:", source);
     this.id = source.data.content.idx
     this.label = source.data.content.label;
@@ -845,9 +1157,9 @@ class ReorderListRow extends Component {
     this.bind(source, data => this.render(data));
   }
 
-  onSelect(evt){
+  onSelect(evt) {
     console.log("reorderlistrow onSelect clicked ", evt);
-    evt.target.parentNode.parentNode.childNodes.forEach((itm, idx, arr)=>{
+    evt.target.parentNode.parentNode.childNodes.forEach((itm, idx, arr) => {
       itm.classList.remove('is-selected');
     })
     evt.target.parentNode.classList.toggle('is-selected');
@@ -855,7 +1167,7 @@ class ReorderListRow extends Component {
 
   }
 
-  compose(){
+  compose() {
     return jdom`
     <tr data-id="${this.id}" onclick="${this.onSelectBound}">
       <td>
@@ -872,8 +1184,8 @@ class ReorderListRow extends Component {
   }
 }
 
-class ReorderListBody extends ListOf(ReorderListRow){
-  compose(){
+class ReorderListBody extends ListOf(ReorderListRow) {
+  compose() {
     console.log("reorderlistbody this.nodes:", this.nodes);
     return jdom`<tbody>
       ${this.nodes}
@@ -888,8 +1200,10 @@ export default {
   init,
   App,
   ModalDialog,
+  EditChoiceDialog,
   ChoiceDialog,
   ReorderDialog,
+  TextEditModalDialog,
   cards,
   populateCardStore
 }

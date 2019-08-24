@@ -7,7 +7,6 @@ let app = null;
 
 
 for (const exportedName in Torus) {
-  // console.log("torus:", exportedName)
   window[exportedName] = Torus[exportedName];
 }
 
