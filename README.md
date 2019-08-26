@@ -3,6 +3,7 @@
 ## Links:
 * [Bleeding edge live updated version](https://repl.it/@triptych/Super-Tiny-IF-Maker-STIM)
 * [More or less stable version](http://stim.netlify.com)
+* [Documentation](https://github.com/triptych/stim/wiki)
 
 ## Credits:
 
